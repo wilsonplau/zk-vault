@@ -25,7 +25,12 @@ contract VaultV3 {
     ) external {
         require(!nullifiers[msg.sender], "Vault: already unlocked");
         require(
-            verifier.verifyProof(_a, _b, _c, [_input[0], _input[1], hash]),
+            verifier.verifyProof(
+                _a,
+                _b,
+                _c,
+                [_input[0], uint256(uint160(msg.sender)), hash]
+            ),
             "Vault: invalid proof"
         );
         (bool success, ) = payable(msg.sender).call{

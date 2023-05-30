@@ -62,7 +62,7 @@ describe("VaultV3", () => {
       const { vault, user } = await loadFixture(deployVault100);
       const callData = await generateProofCalldata({
         password: "9999",
-        address: "0x0000000000000000000000000000000000000000",
+        address: user.address,
         hash: "7898537970610060421230369403623891521254901267565145825118785909981711110169",
       });
       const tx = vault.connect(user).unlock(...callData);
@@ -72,7 +72,7 @@ describe("VaultV3", () => {
       const { vault, user } = await loadFixture(deployVault100);
       const callData = await generateProofCalldata({
         password: "1234",
-        address: "0x0000000000000000000000000000000000000000",
+        address: user.address,
         hash: "1121645852825515626345503741442177404306361956507933536148868635850297893661",
       });
       const tx = vault.connect(user).unlock(...callData);
