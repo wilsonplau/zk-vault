@@ -23,6 +23,7 @@ contract VaultV3 {
         uint256[2] memory _c,
         uint256[3] memory _input
     ) external {
+        require(!nullifiers[msg.sender], "Vault: already unlocked");
         require(
             verifier.verifyProof(_a, _b, _c, [_input[0], _input[1], hash]),
             "Vault: invalid proof"
