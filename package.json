@@ -5,7 +5,11 @@
     "start": "hardhat node",
     "test:v1": "hardhat test \"test/VaultV1.spec.ts\"",
     "test:v2": "hardhat test \"test/VaultV2.spec.ts\"",
-    "hack:v1": "hardhat run --network localhost scripts/hackVaultV1.ts"
+    "test:v3": "hardhat test \"test/VaultV3.spec.ts\"",
+    "generate": "hardhat run --network localhost scripts/generatePoseidonHash.ts",
+    "hack:v1": "hardhat run --network localhost scripts/hackVaultV1.ts",
+    "circom:dev": "hardhat circom --deterministic --debug --verbose",
+    "circom:prod": "hardhat circom --verbose"
   },
   "devDependencies": {
     "@ethersproject/abi": "5.7.0",
@@ -21,8 +25,11 @@
     "@types/mocha": "10.0.1",
     "@types/node": "18.15.10",
     "chai": "4.3.7",
+    "circomlib": "2.0.5",
+    "circomlibjs": "0.1.7",
     "ethers": "5.7.2",
     "hardhat": "2.12.6",
+    "hardhat-circom": "3.3.2",
     "hardhat-gas-reporter": "1.0.9",
     "solidity-coverage": "0.8.2",
     "ts-node": "10.9.1",
