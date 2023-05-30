@@ -10,20 +10,11 @@ interface ProofInput {
   hash: string;
 }
 
-interface ProofCallData {
-  a: string[];
-  b: string[][];
-  c: string[];
-  input: string[];
-}
-
 const zkeyPath = path.join(__dirname, "../circuits/password-hash.zkey");
 const wasmPath = path.join(__dirname, "../circuits/password-hash.wasm");
 
 describe("VaultV3", () => {
-  async function generateProofCalldata(
-    input: ProofInput
-  ): Promise<ProofCallData> {
+  async function generateProofCalldata(input: ProofInput) {
     const { proof, publicSignals } = await groth16.fullProve(
       input,
       wasmPath,
@@ -33,14 +24,7 @@ describe("VaultV3", () => {
       proof,
       publicSignals
     );
-    const splitData = callDataString.split("],[");
-    const callData = {
-      a: JSON.parse(`${splitData[0]}]`),
-      b: JSON.parse(`[${splitData[1]}],[${splitData[2]}]`),
-      c: JSON.parse(`[${splitData[3]}]`),
-      input: JSON.parse(`[${splitData[4]}`),
-    };
-    return callData;
+    return JSON.parse("[" + callDataString + "]");
   }
 
   async function deployVault(etherAmount: string) {
@@ -81,9 +65,7 @@ describe("VaultV3", () => {
         address: "0x0000000000000000000000000000000000000000",
         hash: "7898537970610060421230369403623891521254901267565145825118785909981711110169",
       });
-      const tx = vault
-        .connect(user)
-        .unlock(callData.a, callData.b, callData.c, callData.input);
+      const tx = vault.connect(user).unlock(...callData);
       await expect(tx).to.be.revertedWith("Vault: invalid proof");
     });
     it("should unlock if provided with the correct password", async () => {
@@ -93,9 +75,7 @@ describe("VaultV3", () => {
         address: "0x0000000000000000000000000000000000000000",
         hash: "1121645852825515626345503741442177404306361956507933536148868635850297893661",
       });
-      const tx = vault
-        .connect(user)
-        .unlock(callData.a, callData.b, callData.c, callData.input);
+      const tx = vault.connect(user).unlock(...callData);
       await expect(tx).to.not.be.revertedWith("Vault: incorrect password");
       await expect(tx).to.changeEtherBalance(
         user,
